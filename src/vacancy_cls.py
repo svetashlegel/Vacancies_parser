@@ -20,4 +20,21 @@ class Vacancy:
                f"Опыт работы: {self.experience}\n" \
                f"Требования: {self.requirements}\n" \
                f"Ссылка на вакансию: {self.url}"
-    
+
+    @staticmethod
+    def sort_by_salary(vacancies_list):
+        sorted_list = sorted(vacancies_list, key=lambda vacancy: vacancy.salary, reverse=True)
+        return sorted_list
+
+    @staticmethod
+    def get_top_vacancies(vacancies_list, top):
+        top_list = vacancies_list[0:top]
+        return top_list
+
+    @staticmethod
+    def get_vacancies_by_platform(vacancies_list, platform):
+        filtered_list = []
+        for vacancy in vacancies_list:
+            if vacancy.platform == platform:
+                filtered_list.append(vacancy)
+        return filtered_list
