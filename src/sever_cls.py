@@ -42,7 +42,7 @@ class JSONSever(VacanciesSever):
 
     def __init__(self, vacancy_name):
         self.vacancy = vacancy_name
-        self.file = f'vacancies/{vacancy_name}.json'
+        self.file = f'{vacancy_name}.json'
 
         with open(self.file, 'w', encoding='utf-8') as file:
             json.dump([], file)
@@ -58,17 +58,20 @@ class JSONSever(VacanciesSever):
     def get_vacancies(self):
         """Возвращает все доступные вакансии"""
         vacancies = []
-        with open(self.file, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-            if not data:
-                print(f"По запросу '{self.vacancy}' вакансий не найдено")
-                exit()
-            else:
-                for i in data:
-                    vacancy = Vacancy(i['vacancy'], i['company'], i['salary'], i['employment'], i['experience'],
-                                    i['requirements'], i['url'], i['platform'])
-                    vacancies.append(vacancy)
-            return vacancies
+        try:
+            with open(self.file, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                if not data:
+                    print(f"По запросу '{self.vacancy}' вакансий не найдено")
+                    exit()
+                else:
+                    for i in data:
+                        vacancy = Vacancy(i['vacancy'], i['company'], i['salary'], i['employment'], i['experience'],
+                                          i['requirements'], i['url'], i['platform'])
+                        vacancies.append(vacancy)
+                return vacancies
+        except FileNotFoundError:
+            print("Файл не найден")
 
     def get_vacancies_by_salary(self, salary):
         """Возвращает вакансии, соответствующие уровню зарплаты"""
@@ -83,17 +86,20 @@ class JSONSever(VacanciesSever):
             print("Ошибка распознования: данные введены не в формате min-max")
             exit()
         else:
-            with open(self.file, 'r', encoding='utf-8') as file:
-                data = json.load(file)
-                if not data:
-                    print(f"По запросу '{self.vacancy}' вакансий не найдено")
-                    exit()
-                else:
-                    for i in data:
-                        vacancy = Vacancy(i['vacancy'], i['company'], i['salary'], i['employment'], i['experience'],
-                                        i['requirements'], i['url'], i['platform'])
-                        if salary_min <= vacancy.salary <= salary_max:
-                            vacancies.append(vacancy)
+            try:
+                with open(self.file, 'r', encoding='utf-8') as file:
+                    data = json.load(file)
+            except FileNotFoundError:
+                print("Файл не найден")
+            if not data:
+                print(f"По запросу '{self.vacancy}' вакансий не найдено")
+                exit()
+            else:
+                for i in data:
+                    vacancy = Vacancy(i['vacancy'], i['company'], i['salary'], i['employment'], i['experience'],
+                                      i['requirements'], i['url'], i['platform'])
+                    if salary_min <= vacancy.salary <= salary_max:
+                        vacancies.append(vacancy)
             if not vacancies:
                 print("В соответствии с установленным уровнем заработной платы вакансий не найдено")
             else:
@@ -109,18 +115,21 @@ class JSONSever(VacanciesSever):
             print("Ошибка распознавания: выбранный номер отсутствует в списке")
             exit()
         vacancies = []
-        with open(self.file, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-            if not data:
-                print(f"По запросу '{self.vacancy}' вакансий не найдено")
-                exit()
-            else:
-                for i in data:
-                    vacancy = Vacancy(i['vacancy'], i['company'], i['salary'], i['employment'], i['experience'],
-                                    i['requirements'], i['url'], i['platform'])
-                    if vacancy.employment in emp_criterion:
-                        vacancies.append(vacancy)
-            return vacancies
+        try:
+            with open(self.file, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                if not data:
+                    print(f"По запросу '{self.vacancy}' вакансий не найдено")
+                    exit()
+                else:
+                    for i in data:
+                        vacancy = Vacancy(i['vacancy'], i['company'], i['salary'], i['employment'], i['experience'],
+                                          i['requirements'], i['url'], i['platform'])
+                        if vacancy.employment in emp_criterion:
+                            vacancies.append(vacancy)
+                return vacancies
+        except FileNotFoundError:
+            print("Файл не найден")
 
     def get_vacancies_by_experience(self, experience):
         """Возвращает вакансии, соответствующие выбранному типу занятости"""
@@ -136,29 +145,35 @@ class JSONSever(VacanciesSever):
             print("Ошибка распознавания: выбранный номер отсутствует в списке")
             exit()
         vacancies = []
-        with open(self.file, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-            if not data:
-                print(f"По запросу '{self.vacancy}' вакансий не найдено")
-                exit()
-            else:
-                for i in data:
-                    vacancy = Vacancy(i['vacancy'], i['company'], i['salary'], i['employment'], i['experience'],
-                                    i['requirements'], i['url'], i['platform'])
-                    if vacancy.experience in exp_criterion:
-                        vacancies.append(vacancy)
-            return vacancies
+        try:
+            with open(self.file, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                if not data:
+                    print(f"По запросу '{self.vacancy}' вакансий не найдено")
+                    exit()
+                else:
+                    for i in data:
+                        vacancy = Vacancy(i['vacancy'], i['company'], i['salary'], i['employment'], i['experience'],
+                                          i['requirements'], i['url'], i['platform'])
+                        if vacancy.experience in exp_criterion:
+                            vacancies.append(vacancy)
+                return vacancies
+        except FileNotFoundError:
+            print("Файл не найден")
 
     def delete_vacancy(self, vacancy):
         """Удаляет вакансию"""
-        with open(self.file, 'r', encoding='utf-8') as file:
-            data_vacancies = json.load(file)
-            counter = 0
-            for item in data_vacancies:
-                if item['vacancy'] == vacancy.vacancy:
-                    data_vacancies.pop(counter)
-                else:
-                    counter += 1
-
-        with open(self.file, 'w', encoding='utf-8') as file:
-            json.dump(data_vacancies, file)
+        try:
+            with open(self.file, 'r', encoding='utf-8') as file:
+                data_vacancies = json.load(file)
+                counter = 0
+                for item in data_vacancies:
+                    if item['vacancy'] == vacancy.vacancy:
+                        data_vacancies.pop(counter)
+                    else:
+                        counter += 1
+        except FileNotFoundError:
+            print("Файл не найден")
+        else:
+            with open(self.file, 'w', encoding='utf-8') as file:
+                json.dump(data_vacancies, file)
