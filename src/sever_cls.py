@@ -26,7 +26,7 @@ class JSONSever(VacanciesSever):
     """Класс для работы с json-файлами"""
 
     def __init__(self, vacancy_name):
-        self.file = f'{vacancy_name}.json'
+        self.file = f'vacancies/{vacancy_name}.json'
 
         with open(self.file, 'w', encoding='utf-8') as file:
             json.dump([], file)
