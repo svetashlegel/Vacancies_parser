@@ -2,7 +2,7 @@ from src.api_cls import HeadHunterAPI, SuperJobAPI
 from src.vacancy_cls import Vacancy
 from src.sever_cls import JSONSever
 from src.converter_cls import HeadHunterConverter, SuperJobConverter
-from src.user_interraction_func import get_search_query
+from src.user_interraction_func import get_search_query, get_filtered_list, get_sorted_list, define_platform
 
 
 hh_api = HeadHunterAPI()
@@ -26,3 +26,10 @@ for i in data_sj['objects']:
     if data:
         vacancy = Vacancy(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
         json_sever.add_vacancy(vacancy)
+
+filtered_list = get_filtered_list(json_sever)
+vacancies_by_platform = define_platform(filtered_list)
+sorted_list = get_sorted_list(vacancies_by_platform)
+for vacancy in sorted_list:
+    print(vacancy)
+    print()
