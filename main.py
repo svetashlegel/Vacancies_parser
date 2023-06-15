@@ -2,6 +2,7 @@ from src.api_cls import HeadHunterAPI, SuperJobAPI
 from src.vacancy_cls import Vacancy
 from src.sever_cls import JSONSever
 from src.converter_cls import HeadHunterConverter, SuperJobConverter
+from src.user_interraction_func import get_search_query
 
 
 hh_api = HeadHunterAPI()
@@ -9,7 +10,7 @@ hh_converter = HeadHunterConverter
 superjob_api = SuperJobAPI()
 sj_converter = SuperJobConverter
 
-search_query = 'переводчик'
+search_query = get_search_query()
 json_sever = JSONSever(search_query)
 
 data_hh = hh_api.get_vacancies(search_query)
