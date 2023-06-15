@@ -4,7 +4,6 @@ from src.sever_cls import JSONSever
 from src.converter_cls import HeadHunterConverter, SuperJobConverter
 from src.user_interraction_func import get_search_query, get_filtered_list, get_sorted_list, define_platform
 
-
 hh_api = HeadHunterAPI()
 hh_converter = HeadHunterConverter
 superjob_api = SuperJobAPI()
